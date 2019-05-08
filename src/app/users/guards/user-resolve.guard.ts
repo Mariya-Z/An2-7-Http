@@ -6,7 +6,7 @@ import { Observable, of } from 'rxjs';
 import { delay, map, catchError, finalize, take } from 'rxjs/operators';
 
 import { UserModel } from './../models/user.model';
-import { UserArrayService } from './../services/user-array.service';
+import { UserObservableService  } from './../services';
 import { SpinnerService } from './../../core';
 import { UsersServicesModule } from '../users-services.module';
 
@@ -15,7 +15,7 @@ import { UsersServicesModule } from '../users-services.module';
 })
 export class UserResolveGuard implements Resolve<UserModel> {
   constructor(
-    private userArrayService: UserArrayService,
+    private userObservableService: UserObservableService,
     private router: Router,
     private spinner: SpinnerService
   ) {}
@@ -30,7 +30,7 @@ export class UserResolveGuard implements Resolve<UserModel> {
     this.spinner.show();
     const id = +route.paramMap.get('userID');
 
-    return this.userArrayService.getUser(id).pipe(
+    return this.userObservableService.getUser(id).pipe(
       delay(2000),
       map((user: UserModel) => {
         if (user) {

@@ -6,6 +6,9 @@ import { Router } from '@angular/router';
 // add this line if you don't have access to
 // index.html and you want to set base tag
 // import { APP_BASE_HREF } from '@angular/common';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+
+import { MyInterceptor } from './core/interceptors/my.interceptor';
 
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
@@ -20,6 +23,7 @@ import { AppComponent } from './app.component';
   imports: [
     BrowserModule,
     FormsModule,
+    HttpClientModule,
     CoreModule,
     SharedModule,
     LayoutModule,
@@ -30,8 +34,13 @@ import { AppComponent } from './app.component';
     // add this line if you don't have access to
     // index.html and you want to set base tag
     // { provide: APP_BASE_HREF, useValue: '/' }
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MyInterceptor,
+      multi: true,
+    },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {
   // Diagnostic only: inspect router configuration
